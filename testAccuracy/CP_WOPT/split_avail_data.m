@@ -1,0 +1,11 @@
+avail_inds = find(W==1);%size(avail_inds,1)/prod(sz)
+avail_inds_row = (1:size(avail_inds,1)).';
+valid_inds_row = randperm(size(avail_inds_row,1),round(size(avail_inds_row,1)*valid_rate));
+%valid_inds_row = 1:round(size(avail_inds_row,1)*valid_rate);
+training_inds_row = setdiff(avail_inds_row,valid_inds_row);
+training_inds = avail_inds(training_inds_row,:);
+valid_inds = avail_inds(valid_inds_row,:);
+Wtr = W;%double(W);
+Wval = W;
+Wtr(valid_inds) = 0;
+Wval(training_inds) = 0;
