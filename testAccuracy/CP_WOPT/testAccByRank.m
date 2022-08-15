@@ -4,8 +4,8 @@ clc
 clear
 close all
 missingRates = [0.85 0.80 0.75];
-Rcps = [10];
-%Rcps = [50 100 200 300 400 500];
+%Rcps = [10];
+Rcps = [50 100 200 300 400 500 600];
 ERR = zeros(length(missingRates),length(Rcps));
 ii = 0;
 jj = 0;
