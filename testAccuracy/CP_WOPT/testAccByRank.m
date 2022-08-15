@@ -3,12 +3,12 @@
 clc
 clear
 close all
-missingRates = [0.75 0.65 0.55];
-Rcps = [12 24 48 96 150];
+missingRates = [0.90 0.85 0.80];
+Rcps = [50 100 200 300 400 500];
 ERR = zeros(length(missingRates),length(Rcps));
 ii = 0;
 jj = 0;
-options.maxIts = 50;
+options.maxIts = 100;
 for missingRate = missingRates
     ii = ii+1;
     jj = 0;

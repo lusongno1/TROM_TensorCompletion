@@ -3,8 +3,8 @@
 clc
 clear
 close all
-missingRates = [0.85];
-Rcps = [20];
+missingRates = [0.2];
+Rcps = [120];
 ERR = zeros(length(missingRates),length(Rcps));
 ii = 0;
 jj = 0;
@@ -18,7 +18,7 @@ for missingRate = missingRates
     for Rcp = Rcps
         jj = jj+1;
         global Y_true Yd Wd Err rng_s Wdval Wdmiss
-        rng_seed = 1;
+        rng_seed = 0;
         rng(rng_seed);
         Err = [];
         Y_true = [];
@@ -67,7 +67,7 @@ for missingRate = missingRates
         legend('$\hat \varepsilon$','$\varepsilon$','minimum','Interpreter','LaTex')
         drawnow;
         %%
-        1-Err2(:,2)
+        Err2(:,2)
         cputime
         cputime0
     end
