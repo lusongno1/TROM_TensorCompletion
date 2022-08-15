@@ -1,21 +1,21 @@
-% Last modifed on 08/15/202
+% Last modifed on 08/15/2022
 % lusong@lsec.cc.ac.cn
 clc
 clear
 close all
-missingRates = [0.95 0.85 0.75,0.65,0.55];
-Rcps = [5 10 20 30 40 50 60 70 80 90 100];
+missingRates = [0.75 0.65 0.55];
+Rcps = [12 24 48 96 150];
 ERR = zeros(length(missingRates),length(Rcps));
 ii = 0;
 jj = 0;
-options.maxIts = 200;
+options.maxIts = 50;
 for missingRate = missingRates
     ii = ii+1;
     jj = 0;
     for Rcp = Rcps
         jj = jj+1;
         global Y_true Yd Wd Err rng_s Wdval Wdmiss
-        rng_seed = 0;
+        rng_seed = 99;
         rng(rng_seed);
         Err = [];
         Y_true = [];
@@ -55,7 +55,7 @@ for missingRate = missingRates
         plot(Err2(:,2),'Marker','.');
         xlabel('Iteraion');
         ylabel('Accuracy');
-        title(['Missing:' num2str(missingRate) ',  ' ' CPU time of ' ...
+        title(['Missing:' num2str(missingRate) ',  ' 'Rank:' num2str(Rcp) ' CPU time of ' ...
             num2str(options.maxIts) ' iters:',num2str(cputime) 's']);
         [~,ind] = min(Err2(:,2));
         text_point(ind,Err2(ind,2))
