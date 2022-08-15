@@ -27,7 +27,7 @@ X = Phi;
 missingRate = 0.6;
 creat_missing;
 %% divide available into training set and validation set
-valid_rate = 0.0;
+valid_rate = 0.1;
 %rng(2);
 split_avail_data;
 %% left part
