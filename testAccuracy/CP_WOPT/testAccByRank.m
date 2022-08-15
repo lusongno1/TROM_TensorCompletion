@@ -3,12 +3,14 @@
 clc
 clear
 close all
-missingRates = [0.90 0.85 0.80];
-Rcps = [50 100 200 300 400 500];
+missingRates = [0.85 0.80 0.75];
+Rcps = [10];
+%Rcps = [50 100 200 300 400 500];
 ERR = zeros(length(missingRates),length(Rcps));
 ii = 0;
 jj = 0;
-options.maxIts = 100;
+options.maxIts = 300;
+options.factr = 1e7;
 for missingRate = missingRates
     ii = ii+1;
     jj = 0;
@@ -38,7 +40,6 @@ for missingRate = missingRates
         X = Y_true.*W;
         %checkRate = nnz(X)/prod(sz);
         %%
-        options.factr = 1e7;
         tic
         [Y,~,output] = cp_wopt(X, W, Rcp, 'opt_options',options);
         cputime = toc;
