@@ -1,49 +1,17 @@
-% A demo of Bayesian CP Factorization on synthetic data
-% Written by  Qibin Zhao 2013 RIKEN BSI
-%
-% In this demo, we provide two Bayesian CP Factorization algorithms: one for
-% incomplete tensor and tensor completion ("BCPF_TC.m") and the other one for
-% complete tensor, which is a more efficient implementation when tensor is 
-% fully observed ("BCPF.m").  
-% The parameter settings are optional, please refer to the help by command 
-% >> help BCPF_TC  
-% Two important settings are initialization method and initilization of maximum rank.
-% 
-% This demo is used for evaluation of CP Rank determination and predictive
-% perofrmance under varying conditions including Tensor size, True rank, 
-% Signal type, Observation ratio, and Noise SNRs.   
-
-% After the model learning, the results can be shown by
-% 1. Visualization of true latent factors and the estimated factors
-% 2. Visualization of observed tensor Y,  the estimated low-CP-rank tensor X
-
-
+clc
+clear
 close all;
 randn('state',1); rand('state',1); %#ok<RAND>
 loadpath;
-%% Generate a low-rank tensor
-DIM = [100,5,5,5,5,10];     % Dimensions of data
-R = 3;                % True CP rank
-DataType = 2;         % 1: Random factors   2: The deterministic factors (sin, cos, square)
+%%
+load ../data574.mat
 
-Z = cell(length(DIM),1);   
-if DataType ==1
-    for m=1:length(DIM)
-          Z{m} =  gaussSample(zeros(R,1), eye(R), DIM(m));  
-    end
-end
-if DataType == 2
-    for m=1:length(DIM)
-        temp = linspace(0, m*2*pi, DIM(m));
-        part1 = [sin(temp); cos(temp); square(linspace(0, 16*pi, DIM(m)))]';
-        part2 = gaussSample(zeros(DIM(m),1), eye(DIM(m)), R-size(part1,2))';
-        Z{m} = [part1 part2];
-        Z{m} = Z{m}(:,1:R);
-        Z{m} = zscore(Z{m});
-    end
-end
+%% Generate a low-rank tensor
+DIM = size(Phi);     % Dimensions of data
+R = 8;                % True CP rank
+DataType = 1;         % 1: Random factors   2: The deterministic factors (sin, cos, square)
 % Generate tensor by factor matrices
-X = double(ktensor(Z));
+X = Phi;
 
 %% Random missing values
 ObsRatio = 0.2;               % Observation rate: [0 ~ 1]
@@ -52,14 +20,9 @@ Omega = Omega(1:round(ObsRatio*prod(DIM)));
 O = zeros(DIM); 
 O(Omega) = 1;
 
-%% Add noise
-SNR = 10;                     % Noise levels
-sigma2 = var(X(:))*(1/(10^(SNR/10)));
-GN = sqrt(sigma2)*randn(DIM);
 
 %% Generate observation tensor Y
-Y = X + GN;
-Y = O.*Y;
+Y = O.*X;
 
 %% Run BayesCP
 fprintf('------Bayesian CP Factorization---------- \n');

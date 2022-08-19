@@ -3,6 +3,7 @@ clc
 clear
 close all
 load ./data574.mat
+addpath(genpath('./wopt')) 
 Phits = tensor(Phi);
 sz  = size(Phi);
 Y_true = Phi;
@@ -43,6 +44,8 @@ for maxIters = maxItersSet
     Xm = double(Xkrec);
     acc_nway = cal_acc(Y_true,Xm);
     %% BCPF
+    
+    %%
     acc_wopt
     acc_nway
     cpu_time_wopt
