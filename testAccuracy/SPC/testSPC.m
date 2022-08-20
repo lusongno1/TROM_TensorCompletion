@@ -13,7 +13,7 @@ Phits = tensor(Phi);
 sz  = size(Phi);
 Y_true = Phi;
 %%
-missingRate = 0.95;
+missingRate = 0.99;
 %creat_missing;
 %Wd = double(W);
 %X = Y_true.*W;
@@ -41,12 +41,12 @@ checkRate = nnz(T)/N;
 
 %% hyperparameters and run SPC-TV
 
-TVQV    = 'tv';        % 'tv' or 'qv' ;
+TVQV    = 'qv';        % 'tv' or 'qv' ;
 rho     = [0.01 0.01 0.01 0.01 0.01 0.01]; % smoothness (0.1 - 1.0) for 'qv' and (0.01 - 0.5) for 'tv' is recommended.
 K       = 10;          % Number of components which are updated in one iteration.
 SNR     = 50;          % error bound
 nu      = 0.01;        % threshold for R <-- R + 1.
-maxiter = 500;       % maximum number of iteration
+maxiter = 5000;       % maximum number of iteration
 tol     = 1e-7;        % tolerance
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
 tic
@@ -57,19 +57,6 @@ tic
 err = cal_acc(Y_true,Xtv)
 %err = cal_acc_avail_std(Y_true,Xtv,Q)
 %checkRate = nnz(Q)/N;
-%% hyperparameters and run SPC-QV
-
-% TVQV    = 'qv';        % 'tv' or 'qv' ;
-% rho     = [1.0 1.0 1.0 1.0 1.0 1.0]; % smoothness (0.1 - 1.0) for 'qv' and (0.01 - 0.5) for 'tv' is recommended.
-% K       = Rcp;          % Number of components which are updated in one iteration.
-% SNR     = 50;          % error bound
-% nu      = 0.01;        % threshold for R <-- R + 1.
-% maxiter = 10;       % maximum number of iteration
-% tol     = 1e-7;        % tolerance
-% out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
-% 
-% [Xqv Z G U histo histo_R] = SPC(T,Q,TVQV,rho,K,SNR,nu,maxiter,tol,out_im);
-%%
 close all;
 %%
 Accs = ERR(:,1);
