@@ -13,7 +13,7 @@ Phits = tensor(Phi);
 sz  = size(Phi);
 Y_true = Phi;
 %%
-missingRate = 0.99;
+missingRate = 0.85;
 %creat_missing;
 %Wd = double(W);
 %X = Y_true.*W;
@@ -45,9 +45,10 @@ TVQV    = 'qv';        % 'tv' or 'qv' ;
 rho     = [0.01 0.01 0.01 0.01 0.01 0.01]; % smoothness (0.1 - 1.0) for 'qv' and (0.01 - 0.5) for 'tv' is recommended.
 K       = 10;          % Number of components which are updated in one iteration.
 SNR     = 50;          % error bound
-nu      = 0.01;        % threshold for R <-- R + 1.
-maxiter = 5000;       % maximum number of iteration
+nu      = 0.005;        % threshold for R <-- R + 1.
+maxiter = 500;       % maximum number of iteration
 tol     = 1e-7;        % tolerance
+
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
 tic
 [Xtv Z G U histo histo_R] = SPC(T,Q,TVQV,rho,K,SNR,nu,maxiter,tol,out_im);

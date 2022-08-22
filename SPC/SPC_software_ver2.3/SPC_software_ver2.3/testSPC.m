@@ -41,9 +41,9 @@ T(Q)= X0(Q);
 
 TVQV    = 'tv';        % 'tv' or 'qv' ;
 rho     = [0.01 0.01 0.01 0.01 0.01 0.01]; % smoothness (0.1 - 1.0) for 'qv' and (0.01 - 0.5) for 'tv' is recommended.
-K       = 10;          % Number of components which are updated in one iteration.
+K       = 3;          % Number of components which are updated in one iteration.
 SNR     = 50;          % error bound
-nu      = 0.01;        % threshold for R <-- R + 1.
+nu      = 0.1;        % threshold for R <-- R + 1.
 maxiter = 300;       % maximum number of iteration
 tol     = 1e-7;        % tolerance
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
