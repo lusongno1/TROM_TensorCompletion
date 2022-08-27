@@ -43,10 +43,10 @@ checkRate = nnz(T)/N;
 
 TVQV    = 'qv';        % 'tv' or 'qv' ;
 rho     = [0.01 0.01 0.01 0.01 0.01 0.01]; % smoothness (0.1 - 1.0) for 'qv' and (0.01 - 0.5) for 'tv' is recommended.
-K       = 10;          % Number of components which are updated in one iteration.
+K       = 5;          % Number of components which are updated in one iteration.
 SNR     = 50;          % error bound
-nu      = 0.005;        % threshold for R <-- R + 1.
-maxiter = 10;       % maximum number of iteration
+nu      = 0.01;        % threshold for R <-- R + 1.
+maxiter = 50;       % maximum number of iteration
 tol     = 1e-7;        % tolerance
 
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
@@ -58,9 +58,11 @@ tic
 err = cal_acc(Y_true,Xtv)
 %err = cal_acc_avail_std(Y_true,Xtv,Q)
 %checkRate = nnz(Q)/N;
+ERR(:,4) = sqrt(histo./sum((Q.*Y_true).^2,'all'));
 close all;
 %%
 Accs = ERR(:,1);
+AccsAvail = ERR(:,4);
 Ranks = ERR(:,2);
 Time = ERR(:,3);
 iters = 1:size(ERR,1);
@@ -69,11 +71,13 @@ figure;
 yyaxis left 
 %plot(iters,Accs,'Marker','.');
 semilogy(iters,Accs);
+hold on;
+semilogy(iters,AccsAvail);
 ylabel('Accuracy')
 yyaxis right 
 plot(iters,Ranks);
 ylabel('Ranks')
-legend('Accuracy $\varepsilon$','Ranks','Interpreter','LaTex');
+legend('Accuracy $\varepsilon$','Accuracy $\tilde \varepsilon$','Ranks','Interpreter','LaTex');
 xlabel('Iterations')
 title(['SPC method: Missing = ' num2str(missingRate)])
 
@@ -99,16 +103,19 @@ Inds(1) = [];
 Inds(end+1) = length(Ranks);
 %Inds = Inds(180:end);
 accs = ERR(Inds,1);
+accsAvail = ERR(Inds,4);
 ranks = ERR(Inds,2);
 time = ERR(Inds,3);
 yyaxis left 
 %plot(ranks,accs,'Marker','.');
 semilogy(ranks,accs,'Marker','.');
+hold on;
+semilogy(ranks,accsAvail,'Marker','.');
 ylabel('Accuracy')
 yyaxis right 
 plot(ranks,time,'Marker','.');
 ylabel('Time Costs(s)')
-legend('Accuracy $\varepsilon$','Time Cost Per Iter(s)','Interpreter','LaTex');
+legend('Accuracy $\varepsilon$','Accuracy  $\tilde \varepsilon$','Time Cost Per Iter(s)','Interpreter','LaTex');
 xlabel('Ranks')
 title(['SPC method: Missing = ' num2str(missingRate)])
 
