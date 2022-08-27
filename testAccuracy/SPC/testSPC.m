@@ -46,7 +46,7 @@ rho     = [0.01 0.01 0.01 0.01 0.01 0.01]; % smoothness (0.1 - 1.0) for 'qv' and
 K       = 10;          % Number of components which are updated in one iteration.
 SNR     = 50;          % error bound
 nu      = 0.005;        % threshold for R <-- R + 1.
-maxiter = 500;       % maximum number of iteration
+maxiter = 10;       % maximum number of iteration
 tol     = 1e-7;        % tolerance
 
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
@@ -72,7 +72,7 @@ semilogy(iters,Accs);
 ylabel('Accuracy')
 yyaxis right 
 plot(iters,Ranks);
-ylabel('Rancks')
+ylabel('Ranks')
 legend('Accuracy $\varepsilon$','Ranks','Interpreter','LaTex');
 xlabel('Iterations')
 title(['SPC method: Missing = ' num2str(missingRate)])
@@ -84,7 +84,7 @@ plot(iters,Time,'Marker','.');
 ylabel('Time Costs(s)')
 yyaxis right 
 plot(iters,Ranks);
-ylabel('Rancks')
+ylabel('Ranks')
 legend('Time Per Iter','Ranks','Interpreter','LaTex');
 xlabel('Iterations')
 title(['SPC method: Missing = ' num2str(missingRate)])
@@ -93,9 +93,10 @@ title(['SPC method: Missing = ' num2str(missingRate)])
 %%
 figure
 [Runq,Inds] = unique(Ranks);
-top = Inds(1);
+%ed = Inds(end);
 Inds = Inds-1;
-Inds(1) = top;
+Inds(1) = [];
+Inds(end+1) = length(Ranks);
 %Inds = Inds(180:end);
 accs = ERR(Inds,1);
 ranks = ERR(Inds,2);
@@ -108,7 +109,7 @@ yyaxis right
 plot(ranks,time,'Marker','.');
 ylabel('Time Costs(s)')
 legend('Accuracy $\varepsilon$','Time Cost Per Iter(s)','Interpreter','LaTex');
-xlabel('Rancks')
+xlabel('Ranks')
 title(['SPC method: Missing = ' num2str(missingRate)])
 
 
