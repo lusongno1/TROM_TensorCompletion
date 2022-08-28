@@ -57,9 +57,9 @@ K       = 10;          % Number of components which are updated in one iteration
 %SNR     = 50;          % error bound
 tilde_epsilon = 0.01; 
 SNR = -log10((tilde_epsilon^2))*10;
-nu      = 0.1;        % threshold for R <-- R + 1.
+nu      = 0.25;        % threshold for R <-- R + 1.
 maxiter = 5000000;       % maximum number of iteration
-tol     = 1e-7;        % tolerance
+tol     = 1e-15;        % tolerance
 
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
 [Xtv Z G U histo histo_R] = SPC(T,Q,TVQV,rho,K,SNR,nu,maxiter,tol,out_im);
