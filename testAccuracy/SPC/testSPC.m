@@ -53,10 +53,12 @@ rho(3) = 0.0; %sensitive to this parameter. set to zero
 rho(4) = 0.0; %not quit sensitive to this parameter. set to zero
 rho(5) = 0.0; %sensitive, set to zero
 rho(6) = 0.0; %not sensive, set to zere
-K       = 5;          % Number of components which are updated in one iteration.
-SNR     = 50;          % error bound
-nu      = 1;        % threshold for R <-- R + 1.
-maxiter = 100;       % maximum number of iteration
+K       = 10;          % Number of components which are updated in one iteration.
+%SNR     = 50;          % error bound
+tilde_epsilon = 0.01; 
+SNR = -log10((tilde_epsilon^2))*10;
+nu      = 0.1;        % threshold for R <-- R + 1.
+maxiter = 5000000;       % maximum number of iteration
 tol     = 1e-7;        % tolerance
 
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
@@ -150,7 +152,9 @@ text(0.1,0.8,['K = ' num2str(K)],'Interpreter','LaTex');
 text(0.1,0.75,['SNR = ' num2str(SNR)],'Interpreter','LaTex');
 text(0.1,0.7,['$\nu =$ ' num2str(nu)],'Interpreter','LaTex');
 text(0.1,0.65,['maxiter = ' num2str(maxiter)],'Interpreter','LaTex');
-text(0.1,0.6,['tol = ' num2str(tol)],'Interpreter','LaTex');
+text(0.1,0.6,['total iters = ' num2str(size(ERR,1))],'Interpreter','LaTex');
+text(0.1,0.55,['tol = ' num2str(tol)],'Interpreter','LaTex');
+
 text(0.1,0.5,['input data size = [' num2str(sz) ']'],'Interpreter','LaTex');
 text(0.1,0.45,['missing rate = ' num2str(missingRate)],'Interpreter','LaTex');
 text(0.1,0.4,['min $\varepsilon$ = ' num2str(min(ERR(:,1)))],'Interpreter','LaTex');
