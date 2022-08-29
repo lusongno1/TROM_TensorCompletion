@@ -22,7 +22,7 @@ sizeOmega0 = size(Omega0,1);
 %% training set and control set
 Omega = Omega0;
 X_Omega = X_Omega0;
-sizeOmega_C = round(sizeOmega0*0.0001);
+sizeOmega_C = round(sizeOmega0*0.1);
 Omega_C_ind = randperm( sizeOmega0, sizeOmega_C );
 Omega_C = Omega( Omega_C_ind, : );
 Omega( Omega_C_ind, : ) = [];
@@ -34,7 +34,7 @@ n = size(X);
 r = [1, 1*ones(1,d-1), 1];
 X0 = TTeMPS_rand( r, n );
 X0 = orthogonalize( X0, X0.order );
-maxrank = 10;%7
+maxrank = 20;%7
 opts_cg = struct('maxiter', 3,'maxiter_final',3, 'tol', 1e-6, ...
     'reltol', 1e-6, 'gradtol', 0, 'maxrank', maxrank,'epsilon',1e-8);
 [X,cost,test,stats] = completion_rankincrease( 'GeomCG', X_Omega, ...

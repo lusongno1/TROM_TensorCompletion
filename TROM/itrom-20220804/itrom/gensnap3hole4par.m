@@ -48,9 +48,9 @@ if iscartsample
     D = 4; % dimension of parameter space 
     ni = zeros(D, 1); % sampling size in each parameter direction     
     ni(1) = 5; 
-    ni(2) = 6;
-    ni(3) = 6; 
-    ni(4) = 6;
+    ni(2) = 3;
+    ni(3) = 3; 
+    ni(4) = 3;
 else
     error('Not implemented');
 end
