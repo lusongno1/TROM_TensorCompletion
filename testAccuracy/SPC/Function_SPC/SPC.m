@@ -33,9 +33,9 @@
 %
 % This code was implemented by Tatsuya Yokota
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [X Z G U histo histo_R] = SPC(T,Q,TV_QV,rho,K,SNR,rate,maxiter,tol,out)
+function [X Z G U histo histo_R] = SPC(T,Q,TV_QV,rho,K,SNR,rate,maxiter,tol,out,maxR)
 
-  maxR = inf;
+  %maxR = inf;
 
   warning off; 
 

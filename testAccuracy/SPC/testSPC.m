@@ -11,6 +11,7 @@ global Y_true ERR
 Y_true = [];
 ERR = [];
 load ../../data574.mat
+%load ../../data574D5633.mat
 Phits = tensor(Phi);
 sz  = size(Phi);
 Y_true = Phi;
@@ -55,14 +56,15 @@ rho(5) = 0.0; %sensitive, set to zero
 rho(6) = 0.0; %not sensive, set to zere
 K       = 10;          % Number of components which are updated in one iteration.
 %SNR     = 50;          % error bound
-tilde_epsilon = 0.01; 
+tilde_epsilon = 0.001; 
 SNR = -log10((tilde_epsilon^2))*10;
-nu      = 0.25;        % threshold for R <-- R + 1.
-maxiter = 5000000;       % maximum number of iteration
-tol     = 1e-15;        % tolerance
+nu      = 0.2;%0.2;        % threshold for R <-- R + 1.
 
+maxR = 100;
+maxiter = inf;       % maximum number of iteration
+tol     = 0;%1e-15;        % tolerance
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
-[Xtv Z G U histo histo_R] = SPC(T,Q,TVQV,rho,K,SNR,nu,maxiter,tol,out_im);
+[Xtv Z G U histo histo_R] = SPC(T,Q,TVQV,rho,K,SNR,nu,maxiter,tol,out_im,maxR);
 %iter:  objective :: epsilon :: conv. speed :: number of components 
 
 %% Err
