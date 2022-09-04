@@ -16,7 +16,7 @@ Phits = tensor(Phi);
 sz  = size(Phi);
 Y_true = Phi;
 %%
-missingRate = 0.85;
+missingRate = 0.0;
 %creat_missing;
 %Wd = double(W);
 %X = Y_true.*W;
@@ -48,7 +48,7 @@ TVQV    = 'qv';        % 'tv' or 'qv' ;
 %rho     = [0.1,0.01,0.01,0.01,0.01,0.01]; % smoothness (0.1 - 1.0) for 'qv' and (0.01 - 0.5) for 'tv' is recommended.
 %rho     = [0.001,0.001,0.001,0.001,0.001,0.001];
 rho     = zeros(1,6);
-rh = 0.01;
+rh = 0.08;
 rho(1) = 0.0; %not quit sensitive, set to zero
 rho(2) = rh; %not sensitive
 rho(3) = rh; %sensitive to this parameter. set to zero
