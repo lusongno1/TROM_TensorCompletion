@@ -59,7 +59,7 @@ K = prod(ni); % total number of parameter samples
 
 % time interval
 tmax = 20; 
-N = 100; % number of time steps
+N = 200; % number of time steps
 dt = tmax / N;
 
 %==========================================================================
