@@ -1,51 +1,34 @@
 %%
-% Last modifed on 08/19/2022
+% Last modifed on 09/07/2022
 % lusong@lsec.cc.ac.cn
 clc
 clear
 close all
-%tic
 rng(0);
 %%
 global Y_true ERR
 Y_true = [];
 ERR = [];
-%load ../../data.mat
-load ../../data574.mat
-%load ../../data948.mat
-%load ../../data574N200.mat
-%load ../../data574D5633.mat
+%%
+%load ../../data574.mat
+%load ../../data574D9555.mat
+load ../../data3072D9555.mat
 Phits = tensor(Phi);
 sz  = size(Phi);
+N = prod(sz);
 Y_true = Phi;
 %%
-missingRate = 0.8;
+missingRate = 0.6;
+%nnzW = nnz(W);
+%checkRate = nnzW/N;
 make_missing;
-%creat_missing;
-%Wd = double(W);
-%X = Y_true.*W;
-%checkRate = nnz(X)/prod(sz);
+%make_missing_diag;
+%%
+Q = logical(double(W));
+T = double(Y_true.*W);
 %%
 addpath Function_SPC
 addpath plotting_function
-
-%%% make synthetic data
-N = 50;
-
-X0 = Phi;
-
-%%% make missing entry
-II = size(X0);
-N  = prod(II);
-missing_rate = missingRate;
-
-idd = (randperm(N) > N*missing_rate);
-Q   = reshape(idd,II);
-T   = zeros(II);
-T(Q)= X0(Q);
-
-checkRate = nnz(T)/N;
-
 %% hyperparameters and run SPC-TV
 
 TVQV    = 'qv';        % 'tv' or 'qv' ;
@@ -63,9 +46,9 @@ K       = 10;          % Number of components which are updated in one iteration
 %SNR     = 50;          % error bound
 tilde_epsilon = 0.0001; 
 SNR = -log10((tilde_epsilon^2))*10;
-nu      = 0.2;%0.2;        % threshold for R <-- R + 1.
+nu      = 0.001;%0.2;        % threshold for R <-- R + 1.
 
-maxR = 100;
+maxR = 250;
 maxiter = inf;       % maximum number of iteration
 tol     = 0;%1e-15;        % tolerance
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.

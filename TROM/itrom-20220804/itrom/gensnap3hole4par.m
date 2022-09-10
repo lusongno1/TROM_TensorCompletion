@@ -47,10 +47,10 @@ uimax = 0.9;
 if iscartsample
     D = 4; % dimension of parameter space 
     ni = zeros(D, 1); % sampling size in each parameter direction     
-    ni(1) = 5; 
-    ni(2) = 3;
-    ni(3) = 3; 
-    ni(4) = 3;
+    ni(1) = 9; 
+    ni(2) = 5;
+    ni(3) = 5; 
+    ni(4) = 5;
 else
     error('Not implemented');
 end
@@ -59,7 +59,7 @@ K = prod(ni); % total number of parameter samples
 
 % time interval
 tmax = 20; 
-N = 200; % number of time steps
+N = 100; % number of time steps
 dt = tmax / N;
 
 %==========================================================================
