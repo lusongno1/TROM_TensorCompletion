@@ -266,11 +266,11 @@ function [X Z G U histo histo_R] = SPC(T,Q,TV_QV,rho,K,SNR,rate,maxiter,tol,out,
     
     global Y_true ERR
     err = cal_acc(Y_true,Z)
+    err_avail = sqrt(histo(iter)./sum((Q.*Y_true).^2,'all'))
     %err2 = cal_acc_avail_std(Y_true,Z,Q)
     %err2 = cal_acc_avail(Y_true,Z,Q)*2
     s = toc;
     ERR(end+1,1:3) = [err,R,s];
-
   end
 
 

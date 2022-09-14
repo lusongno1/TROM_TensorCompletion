@@ -10,19 +10,21 @@ global Y_true ERR
 Y_true = [];
 ERR = [];
 %%
-%load ../../data574.mat
+load ../../data574.mat
 %load ../../data574D9555.mat
-load ../../data3072D9555.mat
+%load ../../data3072D9555.mat
 Phits = tensor(Phi);
 sz  = size(Phi);
 N = prod(sz);
 Y_true = Phi;
 %%
-missingRate = 0.6;
+missingRate = 0.85;
 %nnzW = nnz(W);
 %checkRate = nnzW/N;
 make_missing;
 %make_missing_diag;
+%make_missing_alldim;
+
 %%
 Q = logical(double(W));
 T = double(Y_true.*W);
@@ -46,9 +48,9 @@ K       = 10;          % Number of components which are updated in one iteration
 %SNR     = 50;          % error bound
 tilde_epsilon = 0.0001; 
 SNR = -log10((tilde_epsilon^2))*10;
-nu      = 0.001;%0.2;        % threshold for R <-- R + 1.
+nu      = 0.2;%0.2;        % threshold for R <-- R + 1.
 
-maxR = 250;
+maxR = 100;
 maxiter = inf;       % maximum number of iteration
 tol     = 0;%1e-15;        % tolerance
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.

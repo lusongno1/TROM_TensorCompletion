@@ -1,4 +1,4 @@
-%%
+%% can be discarded
 % Last modifed on 08/19/2022
 % lusong@lsec.cc.ac.cn
 clc
@@ -20,7 +20,7 @@ sz  = size(Phi);
 Y_true = Phi;
 %%
 missingRate = 0.8;
-make_missing;
+%make_missing;
 %creat_missing;
 %Wd = double(W);
 %X = Y_true.*W;
