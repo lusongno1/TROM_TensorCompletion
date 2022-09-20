@@ -22,8 +22,8 @@
 
 close all
 clear all
-load('dataset1');
-load('dataset1res');
+load('data\dataset1');
+load('data\dataset1res');
 
 fprintf('\n 1 Pak ### Inspect raw data - press a key..\n');pause
 figure(1);set(gcf,'Position',[-1 31 804 534]);
@@ -78,8 +78,7 @@ fprintf('\n 5 Pak ### Calculate a [1 3 3] model, list core and facplot - press a
 format short
 format compact
 W=[1 3 3];
-load('dataset3res') 
-[Factors,G,XExpl,Xf]=tucker(X,R,W);
+load('data\dataset3res') %[Factors,G,XExpl,Xf]=tucker(X,R,W);
 int2str(G)
 figure(1);set(gcf,'Position',[-1 31 804 534]);
 

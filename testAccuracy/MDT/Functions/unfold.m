@@ -13,4 +13,5 @@ function Y=unfold(X,n)
 % Y     The corresponding matriziced version of X
 
 N=ndims(X);
+tmp = permute(X, [n 1:n-1 n+1:N]);
 Y=reshape(permute(X, [n 1:n-1 n+1:N]),size(X,n),prod(size(X))/size(X,n));

@@ -1,0 +1,64 @@
+% last modified on 20th sept.
+% lusong@lsec.cc.ac.cn
+clc
+clear
+close all
+rng('default')
+rng(0);
+%% load data
+global Y_true ERR W
+Y_true = [];
+ERR = [];
+W = [];
+load ../../data574.mat
+sz  = size(Phi);
+N = prod(sz);
+Y_true = Phi;
+%% make missing
+missingRate = 0.85;
+make_missing;
+X = Y_true.*W;
+%% replace missing by NaN for Nway Algorithm
+Xd = double(X);
+Xd(Xd==0)=NaN;
+check_rate = sum(isnan(Xd),'all')./numel(Xd);
+%R = ones(1,6)*2;
+R = [10,5,3,3,3,4];
+%R = -1;
+%% call tucker decomposition in N-way toolbox
+%[Factors,G,ExplX,Xm]=tucker(Xd,Fac,Options,ConstrF,ConstrG,Factors,G)
+options(6) = 100;
+%options(2)  = 2;
+Fac = R;
+
+%Fac = ones(1,6)*-1;
+%ConstrF = [2 2 2 2 2 2];
+%[Factors,G,ExplX,Xm]=tucker2(Xd,Fac,options,ConstrF);
+tic
+[Factors,G,ExplX,Xm]=tucker2(Xd,Fac,options);
+s = toc
+%% cal acc
+%[A,B,C,D,E,F]=fac2let(Factors);
+%YY = ttensor(G,Factors);
+%cal_acc((full(YY)),Xm);
+epsilon = cal_acc(Y_true,Xm)
+tilde_epsilon = cal_acc_avail_std(Y_true,Xm,double(W))
+
+%% plot
+Accs = ERR(:,1);
+AccsAvail = ERR(:,2);
+iters = 1:size(Accs,1);
+plot(iters,Accs,'Marker','.');
+hold on;
+plot(iters,AccsAvail,'Marker','.');
+ylabel('Accuracy')
+legend('Accuracy $\varepsilon$','Accuracy $\tilde \varepsilon$','Interpreter','LaTex','Location','best');
+xlabel('Iterations')
+title({['Nway method for HOSVD: Missing = ' num2str(missingRate)...
+    ',time cost=' num2str(s) 's']; ['dataSize =' num2str(size(X))];['Rank =' num2str(Fac)]},'Interpreter','LaTex')
+text(iters(end),Accs(end),num2str(Accs(end)));
+text(iters(end),AccsAvail(end),num2str(AccsAvail(end)));
+
+
+
+

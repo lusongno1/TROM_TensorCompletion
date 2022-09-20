@@ -47,10 +47,10 @@ uimax = 0.9;
 if iscartsample
     D = 4; % dimension of parameter space 
     ni = zeros(D, 1); % sampling size in each parameter direction     
-    ni(1) = 9; 
-    ni(2) = 5;
-    ni(3) = 5; 
-    ni(4) = 5;
+    ni(1) = 4; 
+    ni(2) = 2;
+    ni(3) = 2; 
+    ni(4) = 2;
 else
     error('Not implemented');
 end
@@ -59,7 +59,7 @@ K = prod(ni); % total number of parameter samples
 
 % time interval
 tmax = 20; 
-N = 100; % number of time steps
+N = 50; % number of time steps
 dt = tmax / N;
 
 %==========================================================================
@@ -107,7 +107,7 @@ ns = char('R0', 'R1', 'R2', 'R3')';
 dl = decsg(gm, sf, ns);
 
 geometryFromEdges(model, dl);
-generateMesh(model, 'Hmax', 0.5);
+generateMesh(model, 'Hmax', 1);
 
 % set up the PDE
 % Matlab PDE: m(∂2u/∂t2)+d(∂u/∂t)−∇·(c∇u)+au=f
