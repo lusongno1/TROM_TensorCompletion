@@ -37,7 +37,7 @@ TVQV    = 'qv';        % 'tv' or 'qv' ;
 %rho     = [0.1,0.01,0.01,0.01,0.01,0.01]; % smoothness (0.1 - 1.0) for 'qv' and (0.01 - 0.5) for 'tv' is recommended.
 %rho     = [0.001,0.001,0.001,0.001,0.001,0.001];
 rho     = zeros(1,6);
-rh = 0.08;
+rh = 0.5;
 rho(1) = 0.0; %not quit sensitive, set to zero
 rho(2) = rh; %not sensitive
 rho(3) = rh; %sensitive to this parameter. set to zero
@@ -50,7 +50,7 @@ tilde_epsilon = 0.0001;
 SNR = -log10((tilde_epsilon^2))*10;
 nu      = 0.2;%0.2;        % threshold for R <-- R + 1.
 
-maxR = 100;
+maxR = 10;
 maxiter = inf;       % maximum number of iteration
 tol     = 0;%1e-15;        % tolerance
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
@@ -154,6 +154,10 @@ text(0.1,0.35,['min $\tilde \varepsilon$ = ' num2str(min(ERR(:,4)))],'Interprete
 text(0.1,0.3,['max Rank = ' num2str(max(ERR(:,2)))],'Interpreter','LaTex');
 %sss = toc;
 text(0.1,0.25,['Total time cost = ' num2str(sum(ERR(:,3))) 's'],'Interpreter','LaTex');
+
+%%
+saveas(gcf,'result.png')
+save('vars.mat')
 
 
 
