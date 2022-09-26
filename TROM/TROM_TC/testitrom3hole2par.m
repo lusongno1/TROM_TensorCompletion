@@ -13,12 +13,12 @@
 
 fignum = 100;
 
-ttbpath = '../tensor_toolbox-v3.2.1/';
-tttpath = '../TT-Toolbox-2.3/';
-
-addpath(ttbpath);
-savepath = pwd;
-cd(tttpath); setup; cd(savepath);
+% ttbpath = '../tensor_toolbox-v3.2.1/';
+% tttpath = '../TT-Toolbox-2.3/';
+% 
+% addpath(ttbpath);
+% savepath = pwd;
+% cd(tttpath); setup; cd(savepath);
 
 mstr = 'itrom3hole2par'; % method name string
 
@@ -144,7 +144,7 @@ ns = char('R0', 'R1', 'R2', 'R3')';
 dl = decsg(gm, sf, ns);
 
 geometryFromEdges(model, dl);
-generateMesh(model, 'Hmax', 0.2);
+generateMesh(model, 'Hmax', 1);
 
 % set up the PDE
 % Matlab PDE: m(∂2u/∂t2)+d(∂u/∂t)−∇·(c∇u)+au=f

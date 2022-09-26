@@ -1,10 +1,10 @@
 
-ttbpath = '../tensor_toolbox-v3.2.1/';
-tttpath = '../TT-Toolbox-2.3/';
+%ttbpath = '../tensor_toolbox-v3.2.1/';
+%tttpath = '../TT-Toolbox-2.3/';
 
-addpath(ttbpath);
-savepath = pwd;
-cd(tttpath); setup; cd(savepath);
+%addpath(ttbpath);
+%savepath = pwd;
+%cd(tttpath); setup; cd(savepath);
 
 rngseed = 0;
 rng(rngseed);

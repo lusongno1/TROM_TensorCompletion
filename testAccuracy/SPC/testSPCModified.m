@@ -10,7 +10,7 @@ global Y_true ERR
 Y_true = [];
 ERR = [];
 %%
-load ../../data574.mat
+load ../../data274.mat
 %load ../../data574D9555.mat
 %load ../../data3072D9555.mat
 Phits = tensor(Phi);
@@ -50,7 +50,7 @@ tilde_epsilon = 0.0001;
 SNR = -log10((tilde_epsilon^2))*10;
 nu      = 0.2;%0.2;        % threshold for R <-- R + 1.
 
-maxR = 10;
+maxR = 100;
 maxiter = inf;       % maximum number of iteration
 tol     = 0;%1e-15;        % tolerance
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
@@ -157,8 +157,9 @@ text(0.1,0.25,['Total time cost = ' num2str(sum(ERR(:,3))) 's'],'Interpreter','L
 
 %%
 saveas(gcf,'result.png')
-save('vars.mat')
-
+%save('vars.mat')
+save(['TC_RES' num2str(sz(1)) 'D' num2str(sz(2)) num2str(sz(3)) num2str(sz(4))...
+    num2str(sz(5)) 'T' num2str(sz(6)) '.mat'],'Z','G','U')
 
 
 

@@ -9,15 +9,15 @@
 
 %clear all; 
 %clear model;
-clc
-clear
-
 
 fignum = 100;
 
+ttbpath = '../tensor_toolbox-v3.2.1/';
+tttpath = '../TT-Toolbox-2.3/';
 
-
-
+addpath(ttbpath);
+savepath = pwd;
+cd(tttpath); setup; cd(savepath);
 
 mstr = 'gensnap3hole4par'; % method name string
 
@@ -106,7 +106,7 @@ ns = char('R0', 'R1', 'R2', 'R3')';
 dl = decsg(gm, sf, ns);
 
 geometryFromEdges(model, dl);
-generateMesh(model, 'Hmax', 1);
+generateMesh(model, 'Hmax', 0.2);
 
 % set up the PDE
 % Matlab PDE: m(∂2u/∂t2)+d(∂u/∂t)−∇·(c∇u)+au=f
@@ -150,7 +150,4 @@ if isrerunsnap
     
     fprintf('done in %f sec\n', toc);
 end
-sz = size(Phi);
-save(['data' num2str(sz(1)) 'D' num2str(sz(2)) num2str(sz(3)) num2str(sz(4))...
-    num2str(sz(5)) 'T' num2str(sz(6)) '.mat'])
 
