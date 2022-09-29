@@ -1,6 +1,6 @@
-%clc
-%clear
-%close all
+clc
+clear
+close all
 %% load Tensor Decomposition Data
 data_path = '../../';
 load( [data_path 'TC_RES274D8444T100.mat']);

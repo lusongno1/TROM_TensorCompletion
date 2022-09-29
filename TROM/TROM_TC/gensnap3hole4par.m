@@ -154,6 +154,7 @@ if isrerunsnap
 end
 Phi_t = tensor(Phi);
 Phi_tucker = hosvd(Phi_t,1e-15);
+%Phi_tucker = tucker_als(Phi_t,2);
 relerr = norm(Phi_t-full(Phi_tucker))/norm(Phi_t);
 sz = size(Phi)
 clear Phi Phi_t
