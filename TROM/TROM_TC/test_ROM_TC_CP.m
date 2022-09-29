@@ -1,13 +1,15 @@
-clc
-clear
-close all
+%clc
+%clear
+%close all
 %% load Tensor Decomposition Data
-load ../../TC_RES274D5333T100.mat
-load ../../data274D5333T100.mat
-Phi = Z;
+data_path = '../../';
+load( [data_path 'TC_RES274D8444T100.mat']);
+load( [data_path 'data274D8444T100.mat']);
+Phi = double(Phi_tucker);
+%Phi = Z;
 RCP = size(U{1},2);
 PhiCPk = ktensor(G.',U);
-isTC = 1;
+isTC = 0; %change this one to be SPC or ALS
 %%
 iscp = true;
 M = size(U{1},1);
@@ -48,8 +50,9 @@ end
 % random test parameters from the intervals 
 alpha = [(Biomax - Biomin)*rand(1) + Biomin, ...
          (uimax - uimin)*rand(1) + uimin...
-         (Biomax - Biomin)*rand(1) + Biomin, ...
+         (uimax - uimin)*rand(1) + uimin, ...
          (uimax - uimin)*rand(1) + uimin];
+alpha = [0.25 0.45 0.45 0.45];
 
 fprintf('Test parameter values: '); 
 fprintf(' %g', alpha); fprintf('\n');

@@ -9,15 +9,18 @@
 
 %clear all; 
 %clear model;
+clc
+clear
+close all
 
 fignum = 100;
 
-ttbpath = '../tensor_toolbox-v3.2.1/';
-tttpath = '../TT-Toolbox-2.3/';
+%ttbpath = '../tensor_toolbox-v3.2.1/';
+%tttpath = '../TT-Toolbox-2.3/';
 
-addpath(ttbpath);
-savepath = pwd;
-cd(tttpath); setup; cd(savepath);
+%addpath(ttbpath);
+%savepath = pwd;
+%cd(tttpath); setup; cd(savepath);
 
 mstr = 'gensnap3hole4par'; % method name string
 
@@ -46,10 +49,10 @@ uimax = 0.9;
 if iscartsample
     D = 4; % dimension of parameter space 
     ni = zeros(D, 1); % sampling size in each parameter direction     
-    ni(1) = 5; 
-    ni(2) = 3;
-    ni(3) = 3; 
-    ni(4) = 3;
+    ni(1) = 8; 
+    ni(2) = 4;
+    ni(3) = 4; 
+    ni(4) = 4;
 else
     error('Not implemented');
 end
@@ -106,7 +109,7 @@ ns = char('R0', 'R1', 'R2', 'R3')';
 dl = decsg(gm, sf, ns);
 
 geometryFromEdges(model, dl);
-generateMesh(model, 'Hmax', 0.2);
+generateMesh(model, 'Hmax', 1);
 
 % set up the PDE
 % Matlab PDE: m(∂2u/∂t2)+d(∂u/∂t)−∇·(c∇u)+au=f
@@ -146,8 +149,14 @@ if isrerunsnap
                 alphahat(k, 2), alphahat(k, 3), alphahat(k, 4), ...
                 alphahat(k, 1), Bii, tlist);
         end
-    end
-    
+    end 
     fprintf('done in %f sec\n', toc);
 end
-
+Phi_t = tensor(Phi);
+Phi_tucker = hosvd(Phi_t,1e-15);
+relerr = norm(Phi_t-full(Phi_tucker))/norm(Phi_t);
+sz = size(Phi)
+clear Phi Phi_t
+data_path = '../../';
+save([data_path 'data' num2str(sz(1)) 'D' num2str(sz(2)) num2str(sz(3)) num2str(sz(4))...
+    num2str(sz(5)) 'T' num2str(sz(6)) '.mat'])

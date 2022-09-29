@@ -9,14 +9,19 @@ rng(0);
 global Y_true ERR
 Y_true = [];
 ERR = [];
+
 %%
-load ../../data274.mat
-%load ../../data574D9555.mat
+data_path = '../../';
+load([data_path 'data274D8444T100.mat']);
+%load ../../data274.mat
+%load ../../data274D8444T100.mat
+Phi = double(Phi_tucker);
 %load ../../data3072D9555.mat
-Phits = tensor(Phi);
+%Phits = tensor(Phi);
 sz  = size(Phi);
 N = prod(sz);
 Y_true = Phi;
+clear Phi;
 %%
 missingRate = 0.85;
 %nnzW = nnz(W);
@@ -28,6 +33,7 @@ make_missing;
 %%
 Q = logical(double(W));
 T = double(Y_true.*W);
+clear W;
 %%
 addpath Function_SPC
 addpath plotting_function
@@ -37,7 +43,7 @@ TVQV    = 'qv';        % 'tv' or 'qv' ;
 %rho     = [0.1,0.01,0.01,0.01,0.01,0.01]; % smoothness (0.1 - 1.0) for 'qv' and (0.01 - 0.5) for 'tv' is recommended.
 %rho     = [0.001,0.001,0.001,0.001,0.001,0.001];
 rho     = zeros(1,6);
-rh = 0.5;
+rh = 0.2;
 rho(1) = 0.0; %not quit sensitive, set to zero
 rho(2) = rh; %not sensitive
 rho(3) = rh; %sensitive to this parameter. set to zero
@@ -158,8 +164,9 @@ text(0.1,0.25,['Total time cost = ' num2str(sum(ERR(:,3))) 's'],'Interpreter','L
 %%
 saveas(gcf,'result.png')
 %save('vars.mat')
-save(['TC_RES' num2str(sz(1)) 'D' num2str(sz(2)) num2str(sz(3)) num2str(sz(4))...
-    num2str(sz(5)) 'T' num2str(sz(6)) '.mat'],'Z','G','U')
+%data_path = '../../';
+save([data_path 'TC_RES' num2str(sz(1)) 'D' num2str(sz(2)) num2str(sz(3)) num2str(sz(4))...
+    num2str(sz(5)) 'T' num2str(sz(6)) '.mat'],'G','U')
 
 
 
