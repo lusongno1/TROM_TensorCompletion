@@ -12,7 +12,7 @@ ERR = [];
 
 %%
 data_path = '../../';
-load([data_path 'data274D8444T100.mat']);
+load([data_path 'data274D4222T100.mat']);
 %load ../../data274.mat
 %load ../../data274D8444T100.mat
 Phi = double(Phi_tucker);
@@ -56,15 +56,18 @@ tilde_epsilon = 0.0001;
 SNR = -log10((tilde_epsilon^2))*10;
 nu      = 0.2;%0.2;        % threshold for R <-- R + 1.
 
-maxR = 100;
+maxR = 3;
 maxiter = inf;       % maximum number of iteration
 tol     = 0;%1e-15;        % tolerance
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
-[Xtv Z G U histo histo_R] = SPC(T,Q,TVQV,rho,K,SNR,nu,maxiter,tol,out_im,maxR);
+%[Xtv Z G U histo histo_R] = SPC(T,Q,TVQV,rho,K,SNR,nu,maxiter,tol,out_im,maxR);
+[Z G U histo histo_R] = SPC_Sparse(T,Q,TVQV,rho,K,SNR,nu,maxiter,tol,out_im,maxR);
+
+
 %iter:  objective :: epsilon :: conv. speed :: number of components 
 
 %% Err
-err = cal_acc(Y_true,Xtv)
+err = cal_acc(Y_true,Z)
 %err = cal_acc_avail_std(Y_true,Xtv,Q)
 %checkRate = nnz(Q)/N;
 ERR(:,4) = sqrt(histo./sum((Q.*Y_true).^2,'all'));

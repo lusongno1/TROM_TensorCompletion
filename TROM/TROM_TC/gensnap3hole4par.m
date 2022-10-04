@@ -49,10 +49,10 @@ uimax = 0.9;
 if iscartsample
     D = 4; % dimension of parameter space 
     ni = zeros(D, 1); % sampling size in each parameter direction     
-    ni(1) = 8; 
-    ni(2) = 4;
-    ni(3) = 4; 
-    ni(4) = 4;
+    ni(1) = 4; 
+    ni(2) = 2;
+    ni(3) = 2; 
+    ni(4) = 2;
 else
     error('Not implemented');
 end

@@ -9,7 +9,7 @@ Phi = double(Phi_tucker);
 %Phi = Z;
 RCP = size(U{1},2);
 PhiCPk = ktensor(G.',U);
-isTC = 0; %change this one to be SPC or ALS
+isTC = 1; %change this one to be SPC or ALS
 %%
 iscp = true;
 M = size(U{1},1);
