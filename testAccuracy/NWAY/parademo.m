@@ -34,7 +34,7 @@ disp(' concentrations can be found with parafac')
 disp(' ')
 disp(' First lets look at the raw data:')
 disp(' Press any key to continue')
-pause
+%pause
 
 echo on
 figure(1);
@@ -53,8 +53,8 @@ echo off
 
 disp(' ')
 disp(' Press any key to continue')
-pause
-close all
+%pause
+%close all
 home
 
 disp(' ')
@@ -71,8 +71,8 @@ echo off
 
 disp(' ')
 disp(' Press any key to continue')
-pause
-close all
+%pause
+%close all
 home
 
 
@@ -92,8 +92,8 @@ disp(' ')
 disp(' ')
 disp(' Press any key to continue')
 disp(' ')
-pause
-close all
+%pause
+%close all
 home
 
 echo on
@@ -112,8 +112,8 @@ disp(' ')
 disp(' We will turn the plotting on, so that a graphical output is produced')
 disp(' ') 
 disp(' Press any key to continue')
-pause
-close all
+%pause
+%close all
 home
 
 echo on
@@ -122,8 +122,8 @@ echo off
 
 disp(' ') 
 disp(' Press any key to continue')
-pause
-close all
+%pause
+%close all
 home
 
 disp(' Using the function fac2let, we can get scores and loading out')

@@ -27,9 +27,9 @@ Wd = double(W);
 X = Y_true.*W;
 %checkRate = nnz(X)/prod(sz);
 %%
-Rcp = 12;
+Rcp = 1;
 options.factr = 1e7;
-options.maxIts = 30;
+options.maxIts = 3;
 tic
 [Y,~,output] = cp_wopt(X, W, Rcp, 'opt_options',options);
 cputime = toc;

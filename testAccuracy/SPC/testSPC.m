@@ -11,15 +11,16 @@ global Y_true ERR
 Y_true = [];
 ERR = [];
 %load ../../data.mat
-load ../../data574.mat
+%load ../../data574.mat
 %load ../../data948.mat
 %load ../../data574N200.mat
 %load ../../data574D5633.mat
+load ../../data274D5333T100.mat
 Phits = tensor(Phi);
 sz  = size(Phi);
 Y_true = Phi;
 %%
-missingRate = 0.8;
+missingRate = 0.85;
 %make_missing;
 %creat_missing;
 %Wd = double(W);

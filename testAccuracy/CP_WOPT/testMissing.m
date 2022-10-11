@@ -13,7 +13,8 @@ Wd = [];
 Wdval = [];
 Wdmiss = [];
 %%
-load ../../data574.mat
+%load ../../data574.mat
+load('../../data274D5333T100.mat');
 Phits = tensor(Phi);
 Rcp = 12;
 Phik = cp_als(Phits,Rcp);
@@ -23,18 +24,19 @@ sz  = size(Phi);
 Y_true = Phi;
 X = Phi;
 %%
-missingRate = 0.75;
+missingRate = 0.0;
 creat_missing;
 Wd = double(W);
 X = Y_true.*W;
 %checkRate = nnz(X)/prod(sz);
 %%
-Rcp = 10;
+Rcp = 100;
 options.factr = 1e7;
 options.maxIts = 10;
 tic
 [Y,~,output] = cp_wopt(X, W, Rcp, 'opt_options',options);
-cputime = toc;
+%[Y,~,output] = cp_wopt(X, W, Rcp,'skip_zeroing',true);
+cputime = toc
 %% calculate accuracy
 Yd = double(Y);
 errW = cal_acc_avail(Y_true,Yd,Wd)

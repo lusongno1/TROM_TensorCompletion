@@ -3,7 +3,7 @@
 clc
 clear
 close all
-data = load('../data_missing');
+data = load('../../data_missing');
 Xk = data.X;
 X = double(Xk);
 X(X==0)=NaN;

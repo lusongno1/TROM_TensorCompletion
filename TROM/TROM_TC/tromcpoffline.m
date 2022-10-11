@@ -32,6 +32,7 @@ Phit = tensor(Phi); % tensor object from Phi multi-array
 if nargin < 3, maxit = 100; end
 if nargin < 4, tol   = 1e-4; end
 
+rng(0);
 [PhiCPk, ~, cpout] = cp_als(Phit, R, 'maxiters', maxit, 'tol', tol);
 
 errcp = sqrt( norm(Phit)^2 + norm(PhiCPk)^2 ...

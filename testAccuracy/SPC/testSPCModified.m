@@ -56,7 +56,7 @@ tilde_epsilon = 0.0001;
 SNR = -log10((tilde_epsilon^2))*10;
 nu      = 0.2;%0.2;        % threshold for R <-- R + 1.
 
-maxR = 3;
+maxR = 10;
 maxiter = inf;       % maximum number of iteration
 tol     = 0;%1e-15;        % tolerance
 out_im  = 0;           % you can monitor the process of 'image' completion if out == 1.
