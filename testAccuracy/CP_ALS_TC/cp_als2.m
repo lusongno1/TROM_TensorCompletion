@@ -1,5 +1,4 @@
-%function [P,Uinit,output] = cp_tcals(X,R,Tind,Tval,tolerance,varargin)
-function [P,Uinit,output] = cp_tcals(X,R,Tind,Tval,varargin)
+function [P,Uinit,output] = cp_als(X,R,varargin)
 %CP_ALS Compute a CP decomposition of any type of tensor.
 %
 %   M = CP_ALS(X,R) computes an estimate of the best rank-R
@@ -45,7 +44,7 @@ function [P,Uinit,output] = cp_tcals(X,R,Tind,Tval,varargin)
 %Tensor Toolbox for MATLAB: <a href="https://www.tensortoolbox.org">www.tensortoolbox.org</a>
 
 
-global Y_true W
+
 %% Extract number of dimensions and norm of X.
 N = ndims(X);
 normX = norm(X);
@@ -58,8 +57,6 @@ params.addParameter('dimorder',1:N,@(x) isequal(sort(x),1:N));
 params.addParameter('init', 'random', @(x) (iscell(x) || ismember(x,{'random','nvecs'})));
 params.addParameter('printitn',1,@isscalar);
 params.addParameter('fixsigns',true,@islogical);
-params.addParameter('tilde_epsilon',1e-4,@isscalar);
-params.addParameter('monitor',false);
 params.parse(varargin{:});
 
 %% Copy from params object
@@ -68,8 +65,7 @@ maxiters = params.Results.maxiters;
 dimorder = params.Results.dimorder;
 init = params.Results.init;
 printitn = params.Results.printitn;
-tilde_epsilon = params.Results.tilde_epsilon;
-monitor = params.Results.monitor;
+
 %% Error checking 
 
 %% Set up and error checking on initial guess for U.
@@ -78,7 +74,7 @@ if iscell(init)
     if numel(Uinit) ~= N
         error('OPTS.init does not have %d cells',N);
     end
-    for n = dimorder(1:end)
+    for n = dimorder(2:end)
         if ~isequal(size(Uinit{n}),[size(X,n) R])
             error('OPTS.init{%d} is the wrong size',n);
         end
@@ -89,12 +85,12 @@ else
     % inner iteration.
     if strcmp(init,'random')
         Uinit = cell(N,1);
-        for n = dimorder(1:end)
+        for n = dimorder(2:end)
             Uinit{n} = rand(size(X,n),R);
         end
     elseif strcmp(init,'nvecs') || strcmp(init,'eigs') 
         Uinit = cell(N,1);
-        for n = dimorder(1:end)
+        for n = dimorder(2:end)
             Uinit{n} = nvecs(X,n,R);
         end
     else
@@ -110,7 +106,7 @@ fit = 0;
 U_mttkrp = zeros(size(X, dimorder(end)), R);
 
 if printitn>0
-  fprintf('\nTC_CP_ALS:\n');
+  fprintf('\nCP_ALS:\n');
 end
 
 %% Main Loop: Iterate until convergence
@@ -136,14 +132,9 @@ else
         
         % Iterate over all N modes of the tensor
         for n = dimorder(1:end)
-            %if(exist('lambda','var'))
-%             if(0)
-%                 X = tensor(ktensor(lambda,U));
-%                 X(Tind) = Tval;%modified als for missing data
-%             end
             
             % Calculate Unew = X_(n) * khatrirao(all U except n, 'r').
-            Unew = mttkrp(X,U,n);
+            Unew = mttkrp(ktensor(X),U,n);
             % Save the last MTTKRP result for fitness check.
             if n == dimorder(end)
               U_mttkrp = Unew;
@@ -167,22 +158,9 @@ else
 
             U{n} = Unew;
             UtU(:,:,n) = U{n}'*U{n};
-            
-            P = ktensor(lambda,U);
-            X = tensor(P);
-            X(Tind) = Tval;%modified als for missing data
-            normX = norm(X);
-            %cal_acc(double(X),double(Y_true))
-            %cal_acc(double(X(Tind)),double(Y_true(Tind)))
         end
         
         P = ktensor(lambda,U);
-        
-%         X = tensor(P);
-%         X(Tind) = Tval;%modified als for missing data   
-%         normX = norm(X);
-        
-        
 
         % This is equivalent to innerprod(X,P).
         iprod = sum(sum(P.U{dimorder(end)} .* U_mttkrp) .* lambda');
@@ -201,19 +179,9 @@ else
             flag = 1;
         end
         
-        if(monitor)
-            home
-
-            if (mod(iter,printitn)==0) || ((printitn>0) && (flag==0))
-                fprintf(' Iter %2d: f = %e f-delta = %7.1e\n', iter, fit, fitchange);
-            end
-
-             err = cal_acc_avail_std(double(P),double(Y_true),W)
-             if(err<=tilde_epsilon)
-                 break;
-             end
+        if (mod(iter,printitn)==0) || ((printitn>0) && (flag==0))
+            fprintf(' Iter %2d: f = %e f-delta = %7.1e\n', iter, fit, fitchange);
         end
-         
         
         % Check for convergence
         if (flag == 0)

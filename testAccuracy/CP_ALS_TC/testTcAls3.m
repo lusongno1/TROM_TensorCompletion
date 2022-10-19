@@ -26,16 +26,20 @@ X0 = tensor(T);
 %%
 sz = size(Y_true);
 [Tind,Tval] = find(X0);% non zero positions and values
-[Tind0,Tval0] = find(X0==0);% non zero positions and values
+[Tind0,Tval0] = find(X0==0);% zero positions and values
 nnz(X0)./prod(sz)
 if(size(Tind0)~=0)
     X0init = mean(Tval);
     X0(Tind0) = X0init;
 end
 %%
+%tic
+%X0 = sptensor(Tind,Tval,sz);
+%toc
 R = 100;
 tic
-Y = cp_tcals(X0,R,Tind,Tval,0.01,'tol',1e-12,'maxiters',3000);
+%Y = cp_als(X0,R,'maxiters',30);
+Y = cp_tcals(X0,R,Tind,Tval,0.01,'tol',1e-12,'maxiters',50);
 toc
 cal_acc(double(Y),double(Y_true))
 %cal_acc(double(Y),double(X0))

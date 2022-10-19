@@ -7,8 +7,10 @@ load('../../data274D5333T100.mat');
 clearvars -except Phi
 R = 100;
 Xt = tensor(Phi);
+Xk = cp_als(Xt,100);
+Xk([1,1,1,1,1,1])
 %% cp_als
 tic
-Y = cp_als(Xt,R);
+Y = cp_als(Xk,R);
 toc
 cal_acc(double(Y),Phi)

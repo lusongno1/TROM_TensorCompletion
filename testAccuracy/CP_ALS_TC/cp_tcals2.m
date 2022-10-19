@@ -1,5 +1,6 @@
-%function [P,Uinit,output] = cp_tcals(X,R,Tind,Tval,tolerance,varargin)
-function [P,Uinit,output] = cp_tcals(X,R,Tind,Tval,varargin)
+%try to do it in sparse way
+%function [P,Uinit,output] = cp_tcals2(X,R,Tind,Tval,tolerance,varargin)
+function [P,Uinit,output] = cp_tcals2(X,R,Tind,varargin)
 %CP_ALS Compute a CP decomposition of any type of tensor.
 %
 %   M = CP_ALS(X,R) computes an estimate of the best rank-R
@@ -43,12 +44,10 @@ function [P,Uinit,output] = cp_tcals(X,R,Tind,Tval,varargin)
 %   See also KTENSOR, TENSOR, SPTENSOR, TTENSOR.
 %
 %Tensor Toolbox for MATLAB: <a href="https://www.tensortoolbox.org">www.tensortoolbox.org</a>
-
-
-global Y_true W
 %% Extract number of dimensions and norm of X.
 N = ndims(X);
 normX = norm(X);
+Xp = X;
 
 %% Set algorithm parameters from input or by using defaults
 params = inputParser;
@@ -58,8 +57,6 @@ params.addParameter('dimorder',1:N,@(x) isequal(sort(x),1:N));
 params.addParameter('init', 'random', @(x) (iscell(x) || ismember(x,{'random','nvecs'})));
 params.addParameter('printitn',1,@isscalar);
 params.addParameter('fixsigns',true,@islogical);
-params.addParameter('tilde_epsilon',1e-4,@isscalar);
-params.addParameter('monitor',false);
 params.parse(varargin{:});
 
 %% Copy from params object
@@ -68,8 +65,7 @@ maxiters = params.Results.maxiters;
 dimorder = params.Results.dimorder;
 init = params.Results.init;
 printitn = params.Results.printitn;
-tilde_epsilon = params.Results.tilde_epsilon;
-monitor = params.Results.monitor;
+
 %% Error checking 
 
 %% Set up and error checking on initial guess for U.
@@ -78,7 +74,7 @@ if iscell(init)
     if numel(Uinit) ~= N
         error('OPTS.init does not have %d cells',N);
     end
-    for n = dimorder(1:end)
+    for n = dimorder(2:end)
         if ~isequal(size(Uinit{n}),[size(X,n) R])
             error('OPTS.init{%d} is the wrong size',n);
         end
@@ -89,18 +85,19 @@ else
     % inner iteration.
     if strcmp(init,'random')
         Uinit = cell(N,1);
-        for n = dimorder(1:end)
+        for n = dimorder(1:end)%********************
             Uinit{n} = rand(size(X,n),R);
         end
     elseif strcmp(init,'nvecs') || strcmp(init,'eigs') 
         Uinit = cell(N,1);
-        for n = dimorder(1:end)
+        for n = dimorder(2:end)
             Uinit{n} = nvecs(X,n,R);
         end
     else
         error('The selected initialization method is not supported');
     end
 end
+lambda = ones(R,1);
 
 %% Set up for iterations - initializing U and the fit.
 U = Uinit;
@@ -141,9 +138,30 @@ else
 %                 X = tensor(ktensor(lambda,U));
 %                 X(Tind) = Tval;%modified als for missing data
 %             end
+            %Xp = X;
             
+%             for ii=1:size(Tind,1)
+%                 tmp = 0;
+%                 for jj = 1:R
+%                     for kk=1:6
+%                         tmp = tmp+U{kk}(Tind(kk));
+%                     end
+%                 end
+%                 %Xp(Tind(ii,:)) = Xp(Tind(ii,:))+P(Tind(ii,:));    
+%                 Xp(Tind(ii,:)) = Xp(Tind(ii,:))+tmp;   
+%             end
+            %tic
+            %P(1,1,1,1,1,1)
+            %Xp = X+sptensor(Tind,P(Tind),size(X));
+            %toc
             % Calculate Unew = X_(n) * khatrirao(all U except n, 'r').
-            Unew = mttkrp(X,U,n);
+            %ktensor
+            P = ktensor(lambda,U);
+            P = tensor(P);
+            Xp(Tind) = X(Tind)-P(Tind);
+                
+            Unew = mttkrp(Xp,U,n);
+            
             % Save the last MTTKRP result for fitness check.
             if n == dimorder(end)
               U_mttkrp = Unew;
@@ -155,6 +173,10 @@ else
             if issparse(Unew)
                 Unew = full(Unew);   % for the case R=1
             end
+            
+            Unew = Unew+U{n}*diag(lambda);%*****************
+            
+            
                         
             % Normalize each vector to prevent singularities in coefmatrix
             if iter == 1
@@ -166,12 +188,19 @@ else
             Unew = bsxfun(@rdivide, Unew, lambda');
 
             U{n} = Unew;
+            
+            
             UtU(:,:,n) = U{n}'*U{n};
             
-            P = ktensor(lambda,U);
-            X = tensor(P);
-            X(Tind) = Tval;%modified als for missing data
-            normX = norm(X);
+%             P = ktensor(lambda,U);
+%             X = tensor(P);
+%             X(Tind) = Tval;%modified als for missing data
+%             normX = norm(X);
+            
+%             P = ktensor(lambda,U);
+%             X = tensor(P);
+%             X(Tind) = Tval;%modified als for missing data
+%             normX = norm(X);
             %cal_acc(double(X),double(Y_true))
             %cal_acc(double(X(Tind)),double(Y_true(Tind)))
         end
@@ -201,19 +230,15 @@ else
             flag = 1;
         end
         
-        if(monitor)
-            home
-
-            if (mod(iter,printitn)==0) || ((printitn>0) && (flag==0))
-                fprintf(' Iter %2d: f = %e f-delta = %7.1e\n', iter, fit, fitchange);
-            end
-
-             err = cal_acc_avail_std(double(P),double(Y_true),W)
-             if(err<=tilde_epsilon)
-                 break;
-             end
+        if (mod(iter,printitn)==0) || ((printitn>0) && (flag==0))
+            fprintf(' Iter %2d: f = %e f-delta = %7.1e\n', iter, fit, fitchange);
         end
-         
+        
+%         global Y_true
+%         err = cal_acc(double(X),double(Y_true))
+%         if(err<tolerance)
+%             break;
+%         end
         
         % Check for convergence
         if (flag == 0)
@@ -231,15 +256,15 @@ if params.Results.fixsigns
     P = fixsigns(P);
 end
 
-if printitn>0
-    if normX == 0
-        fit = norm(P)^2 - 2 * innerprod(X,P);
-    else
-        normresidual = sqrt( normX^2 + norm(P)^2 - 2 * innerprod(X,P) );
-        fit = 1 - (normresidual / normX); %fraction explained by model
-    end
-  fprintf(' Final f = %e \n', fit);
-end
+% if printitn>0
+%     if normX == 0
+%         fit = norm(P)^2 - 2 * innerprod(X,P);
+%     else
+%         normresidual = sqrt( normX^2 + norm(P)^2 - 2 * innerprod(X,P) );
+%         fit = 1 - (normresidual / normX); %fraction explained by model
+%     end
+%   fprintf(' Final f = %e \n', fit);
+% end
 
 output = struct;
 output.params = params.Results;
